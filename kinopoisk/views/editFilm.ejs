@@ -1,0 +1,82 @@
+<html lang="en">
+<head>
+    <%- include('partials/head.ejs') %>
+    <title>Document</title>
+</head>
+<body>
+    <%- include('partials/header.ejs') %>
+    <div class="container">
+        <div class="main">
+            <form action="/api/films/edit" method="POST" class="form" enctype="multipart/form-data">
+                <h3>Редактировать фильм</h3>
+                <fieldset>
+                    <input type="hidden" value="<%=films._id%>" name="id">
+                </fieldset>
+                <fieldset class="fieldset">
+                    <label for="">Картинка фильма</label>
+                    <input type="file"  name="image" id="">
+                </fieldset>
+                <fieldset class="fieldset">
+                    <label for="">Назавние фильма на русском </label>
+                    <input type="text" value="<%=films.titleRus%>" placeholder="Введите название фильма на русском " name="titleRus" id="">
+                </fieldset>
+                <fieldset class="fieldset">
+                    <label for="">Назавние фильма на англиском </label>
+                    <input type="text" value="<%=films.titleEng%>" placeholder="Введите название фильма на англиском " name="titleEng" id="">
+                </fieldset>
+                <fieldset class="fieldset">
+                    <label for="">Год выпуска</label>
+                    <input type="text" value="<%=films.year%>" placeholder="Введите год выпуска фильма " name="year" id="">
+                </fieldset>
+                <fieldset class="fieldset">
+                    <label for="">Длительность фильма</label>
+                    <input type="text" value="<%=films.time%>" placeholder="Введите длительность фильма" name="time" id="">
+                </fieldset>
+                <fieldset class="fieldset">
+                    <label for="">Cсылка на трейлер</label>
+                    <input type="text" value="<%=films.linkForTreiler%> " placeholder="Введите ссылку на трейлер" name="linkForTreiler" id="">
+                </fieldset>
+                <fieldset class="fieldset">
+                    <label for="">Страна выпуска</label>
+                    <select name="country" id="">
+                        <option value="">...</option>
+                        <option value="">...</option>
+                        <%country.forEach(country => {
+                            if(country.id == films.country){ 
+                            %> 
+                            <option  value="<%=country._id%>" selected> <%=country.name%></option>
+                            <% 
+                            } else { 
+                                %>                        
+                                <option value="<%=country._id%>" ><%=country.name%></option>
+                                <%
+                            }
+                            %>
+                        <%})%>
+                    </select>
+                </fieldset>
+                <fieldset class="fieldset">
+                    <label for="">Введите жанр фильма</label>
+                    <select name="genre" id=""> 
+                        <option value="">...</option>
+                        <%genres.forEach(genre=> {
+                            if(genre.id == films.genre){ 
+                                %> 
+                                <option value="<%=genre._id%>" selected><%=genre.name%></option>
+                                <%
+                                   }else { 
+                                %> 
+                                   
+                            <option value="<%=genre._id%>"><%=genre.name%></option>
+                        <%  }})   %>
+                    </select>
+                </fieldset>
+                <fieldset class="fieldset">
+                    <button class="fieldset" type="submit" >Сохранить</button>
+                </fieldset>
+            </form>
+        </div>
+    </div>
+    <%- include('partials/scripts.ejs');%> 
+</body>
+</html>

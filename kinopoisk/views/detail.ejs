@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <%- include('partials/head.ejs')%>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <%- include('partials/header.ejs')%>
+    <div class="container">
+        <div class="main-detail">
+            <div class="detail">
+                    <div class="main-film-image">
+                    <img src="<%=film.image%>" alt="">
+                </div>
+                <div class="main-film-info-detail">
+                    <h2><%=film.titleRus%> ,<%=film.year%> </h2>
+                    <p><%=film.titlEng%></p>
+                    <% 
+                        if(user && user.toWatch && user.toWatch.includes(film._id)){ 
+                    %> 
+                        <button class="main-card-info-button" onclick="deleteFromToWatch('<%=film._id%>')"> 
+                            <img class="main-card-info-button-img" src="/images/icons/saved.png" alt="" style="width: 15%;">
+                            Сохранено
+                        </button>
+                    <%
+                            }else { 
+                    %>
+                        <button class="main-card-info-button" onclick="saveToWatch('<%=film._id%>')"> 
+                            <img src="/images/icons/save.svg" alt="">
+                            Буду смотреть
+                        </button>
+                    <%
+                        }
+                    %>
+                    
+                    <h4>О фильме </h4>
+                    <div class='main-film-details'>
+                        <p>Год производства</p>
+                        <p><%=film.year%></p>
+                    </div>
+                    <div class='main-film-details'>
+                        <p>Страна</p>
+                        <p><%=film.country.name%></p>
+                    </div>
+                    <div class='main-film-details'>
+                        <p>Жанр</p>
+                        <p><%=film.genre.name%></p>
+                    </div>
+                    <div class='main-film-details'>
+                        <p>Время </p>
+                        <p><%=film.time%> мин </p>
+                    </div>
+                    <div class='main-film-details'>
+                        <p>Рейтинг </p>
+                        <p><%=averageRate%></p>
+                    </div>
+                </div>
+            </div>
+            <% if(film.linkForTreiler){ %>
+                <div class="main-film-player">
+                    <iframe width="560" height="315" src="<%=film.linkForTreiler%>" title="YouTube video player" 
+                    frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" 
+                    allowfullscreen></iframe>        
+                </div>
+            <%
+            }
+            %> 
+            <div class="coments">
+                <h3>Коментарий</h3>
+                <% if (user && user._id){ 
+                    %>
+                <form onSubmit="sendRate(event)" class="add-coment-form">
+                    <p>Оцените фильм</p>
+                    <div class="coments-stars">
+                        <img onclick="rateFilm(1)" src="/images/icons/star.svg" alt="">
+                        <img onclick="rateFilm(2)" src="/images/icons/star.svg" alt="">
+                        <img onclick="rateFilm(3)" src="/images/icons/star.svg" alt="">
+                        <img onclick="rateFilm(4)" src="/images/icons/star.svg" alt="">
+                        <img onclick="rateFilm(5)" src="/images/icons/star.svg" alt="">
+                    </div>
+                    
+                    <p>Напишите коментарий</p>
+                    <textarea id="coment-text" ></textarea>
+                    <input type="hidden" value="<%=user._id%>" id="comment_author">
+                    <input type="hidden" value="<%=film._id%>" id="comment_film">
+                    <button type="submit"> Сохранить </button>
+                </form>
+                <%
+                    }else { 
+                %>
+                <p>
+                    <a href="/login">Войдите</a>
+                    или
+                    <a href="/register">Зарегистрируйтесь</a>, 
+                    чтобы оставить коментарий
+                </p>
+                <%
+                    }
+                %>
+                <%
+                    if(rates){ 
+                        rates.forEach(rate =>{ 
+                %>
+                    <div class="coment">
+                        <p>Автор: <a href=""><%=rate.authorId.full_name%></a></p>
+                        <div class="coments-stars">
+                            <%
+                                for(let i = 0 ; i < 5 ; i++ ){
+                                    if(i<rate.rate){ 
+                            %>
+                                        <img class="active-stars" onclick="rateFilm(1)" src="/images/icons/star.svg" alt="">
+                            <% 
+                                }else { 
+                            %>
+                                <img src="/images/icons/star.svg" alt="">
+                            <%  
+                                    }}                               
+                            %>
+                            
+                        </div>
+                        <% if (rate.text.length > 0){ %>
+                            <p>Коментарий: <%=rate.text%></p>
+                        <%
+                            }
+                        %>
+                    </div>            
+
+                <%
+                        })
+                    }
+                %> 
+            </div>
+        </div>
+    </div>
+    <%- include('partials/scripts.ejs');%> 
+</body>
+</html>
